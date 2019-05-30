@@ -300,6 +300,7 @@ typedef enum {
     TF_NETSCALER,
     TF_BARRACUDA,
     TF_GIGAMON,
+    TF_INTERFACE_MASTERS,
     TF_NO_VENDOR_INFO
 } v9_v10_tmplt_fields_type_t;
 #define TF_NUM 2
@@ -1766,6 +1767,74 @@ static const value_string v10_template_types_barracuda[] = {
 };
 static value_string_ext v10_template_types_barracuda_ext = VALUE_STRING_EXT_INIT(v10_template_types_barracuda);
 
+static const value_string v10_template_types_interface_masters[] = {
+    { 100, "SslServerNameIndication" },
+    { 101, "SslServerVersion" },
+    { 102, "SslServerVersionText" },
+    { 103, "SslServerCipher" },
+    { 104, "SslServerCipherText" },
+    { 105, "SslConnectionEncriptionType" },
+    { 106, "SslServerCompressionMethod" },
+    { 107, "SslServerSessionId" },
+    { 108, "SslCertificateIssuer" },
+    { 109, "SslCertificateIssuerName" },
+    { 110, "SslCertificateSubject" },
+    { 111, "SslCertificateSubjectName" },
+    { 112, "SslCertificateValidNotBefore" },
+    { 113, "SslCertificateValidNotAfter" },
+    { 114, "SslCertificateSerialNumber" },
+    { 115, "SslCertificateSignatureAlgorithm" },
+    { 116, "SslCertificateSignatureAlgorithmText" },
+    { 117, "SslCertificateSubjectPublicKeySize" },
+    { 118, "SslCertificateSubjectPublicAlgorithm" },
+    { 119, "SslCertificateSubjectPublicAlgorithmText" },
+    { 120, "SslCertificateSubjectAlgorithmText" },
+    { 121, "SslCertificateSubjectAlternativeName" },
+    { 200, "DnsIdentifier" },
+    { 201, "DnsOpCode" },
+    { 202, "DnsResponseCode" },
+    { 203, "DnsQueryName" },
+    { 204, "DnsResponseName" },
+    { 205, "DnsResponseTTL" },
+    { 206, "DnsResponseIPv4Addr" },
+    { 207, "DnsResponseIPv4AddrText" },
+    { 208, "DnsResponseIPv6Addr" },
+    { 209, "DnsResponseIPv6AddrText" },
+    { 210, "DnsBits" },
+    { 211, "DnsQDCount" },
+    { 212, "DnsANCount" },
+    { 213, "DnsNSCount" },
+    { 214, "DnsARCount" },
+    { 215, "DnsQueryType" },
+    { 216, "DnsQueryTypeText" },
+    { 217, "DnsQueryClass" },
+    { 218, "DnsQueryClassText" },
+    { 219, "DnsReponseType" },
+    { 220, "DnsResponseTypeText" },
+    { 221, "DnsResponseClass" },
+    { 222, "DnsResponseClassText" },
+    { 223, "DnsResponseRDLength" },
+    { 224, "DnsResponseRData" },
+    { 225, "DnsAuthorityName" },
+    { 226, "DnsAuthorityType" },
+    { 227, "DnsAuthorityTypeText" },
+    { 228, "DnsAuthorityClass" },
+    { 229, "DnsAuthorityClassText" },
+    { 230, "DnsAuthorityTTL" },
+    { 231, "DnsAuthorityRDLength" },
+    { 232, "DnsAuthorityRData" },
+    { 233, "DnsAdditionalName" },
+    { 234, "DnsAdditionalType" },
+    { 235, "DnsAdditionalTypeText" },
+    { 236, "DnsAdditionalClass" },
+    { 237, "DnsAdditionalClassText" },
+    { 238, "DnsAdditionalTTL" },
+    { 239, "DnsAdditionalRDLength" },
+    { 240, "DnsAdditionalRData" },
+    { 0, NULL }
+};
+static value_string_ext v10_template_types_interface_masters_ext = VALUE_STRING_EXT_INIT(v10_template_types_interface_masters);
+
 static const value_string v10_barracuda_logop[] = {
     { 0, "Unknown" },
     { 1, "Allow" },
@@ -2054,6 +2123,7 @@ static int      hf_cflow_template_ixia_field_type                   = -1;
 static int      hf_cflow_template_netscaler_field_type              = -1;
 static int      hf_cflow_template_barracuda_field_type              = -1;
 static int      hf_cflow_template_gigamon_field_type                = -1;
+static int      hf_cflow_template_interface_masters_field_type      = -1;
 
 
 /*
@@ -3190,6 +3260,71 @@ static int      hf_pie_gigamon_dnsadditionalclass                = -1;
 static int      hf_pie_gigamon_dnsadditionalttl                  = -1;
 static int      hf_pie_gigamon_dnsadditionalrdlength             = -1;
 static int      hf_pie_gigamon_dnsadditionalrdata                = -1;
+
+static int      hf_pie_interface_masters                                             = -1;
+static int      hf_pie_interface_masters_sslservernameindication                     = -1;
+static int      hf_pie_interface_masters_sslserverversion                            = -1;
+static int      hf_pie_interface_masters_sslserverversiontext                        = -1;
+static int      hf_pie_interface_masters_sslservercipher                             = -1;
+static int      hf_pie_interface_masters_sslserverciphertext                         = -1;
+static int      hf_pie_interface_masters_sslconnectionencriptiontype                 = -1;
+static int      hf_pie_interface_masters_sslservercompressionmethod                  = -1;
+static int      hf_pie_interface_masters_sslserversessionid                          = -1;
+static int      hf_pie_interface_masters_sslcertificateissuer                        = -1;
+static int      hf_pie_interface_masters_sslcertificateissuername                    = -1;
+static int      hf_pie_interface_masters_sslcertificatesubject                       = -1;
+static int      hf_pie_interface_masters_sslcertificatesubjectname                   = -1;
+static int      hf_pie_interface_masters_sslcertificatevalidnotbefore                = -1;
+static int      hf_pie_interface_masters_sslcertificatevalidnotafter                 = -1;
+static int      hf_pie_interface_masters_sslcertificateserialnumber                  = -1;
+static int      hf_pie_interface_masters_sslcertificatesignaturealgorithm            = -1;
+static int      hf_pie_interface_masters_sslcertificatesignaturealgorithmtext        = -1;
+static int      hf_pie_interface_masters_sslcertificatesubjectpublickeysize          = -1;
+static int      hf_pie_interface_masters_sslcertificatesubjectpublicalgorithm        = -1;
+static int      hf_pie_interface_masters_sslcertificatesubjectpublicalgorithmtext    = -1;
+static int      hf_pie_interface_masters_sslcertificatesubjectalgorithmtext          = -1;
+static int      hf_pie_interface_masters_sslcertificatesubjectalternativename        = -1;
+static int      hf_pie_interface_masters_dnsidentifier                               = -1;
+static int      hf_pie_interface_masters_dnsopcode                                   = -1;
+static int      hf_pie_interface_masters_dnsresponsecode                             = -1;
+static int      hf_pie_interface_masters_dnsqueryname                                = -1;
+static int      hf_pie_interface_masters_dnsresponsename                             = -1;
+static int      hf_pie_interface_masters_dnsresponsettl                              = -1;
+static int      hf_pie_interface_masters_dnsresponseipv4addr                         = -1;
+static int      hf_pie_interface_masters_dnsresponseipv4addrtext                     = -1;
+static int      hf_pie_interface_masters_dnsresponseipv6addr                         = -1;
+static int      hf_pie_interface_masters_dnsresponseipv6addrtext                     = -1;
+static int      hf_pie_interface_masters_dnsbits                                     = -1;
+static int      hf_pie_interface_masters_dnsqdcount                                  = -1;
+static int      hf_pie_interface_masters_dnsancount                                  = -1;
+static int      hf_pie_interface_masters_dnsnscount                                  = -1;
+static int      hf_pie_interface_masters_dnsarcount                                  = -1;
+static int      hf_pie_interface_masters_dnsquerytype                                = -1;
+static int      hf_pie_interface_masters_dnsquerytypetext                            = -1;
+static int      hf_pie_interface_masters_dnsqueryclass                               = -1;
+static int      hf_pie_interface_masters_dnsqueryclasstext                           = -1;
+static int      hf_pie_interface_masters_dnsreponsetype                              = -1;
+static int      hf_pie_interface_masters_dnsresponsetypetext                         = -1;
+static int      hf_pie_interface_masters_dnsresponseclass                            = -1;
+static int      hf_pie_interface_masters_dnsresponseclasstext                        = -1;
+static int      hf_pie_interface_masters_dnsresponserdlength                         = -1;
+static int      hf_pie_interface_masters_dnsresponserdata                            = -1;
+static int      hf_pie_interface_masters_dnsauthorityname                            = -1;
+static int      hf_pie_interface_masters_dnsauthoritytype                            = -1;
+static int      hf_pie_interface_masters_dnsauthoritytypetext                        = -1;
+static int      hf_pie_interface_masters_dnsauthorityclass                           = -1;
+static int      hf_pie_interface_masters_dnsauthorityclasstext                       = -1;
+static int      hf_pie_interface_masters_dnsauthorityttl                             = -1;
+static int      hf_pie_interface_masters_dnsauthorityrdlength                        = -1;
+static int      hf_pie_interface_masters_dnsauthorityrdata                           = -1;
+static int      hf_pie_interface_masters_dnsadditionalname                           = -1;
+static int      hf_pie_interface_masters_dnsadditionaltype                           = -1;
+static int      hf_pie_interface_masters_dnsadditionaltypetext                       = -1;
+static int      hf_pie_interface_masters_dnsadditionalclass                          = -1;
+static int      hf_pie_interface_masters_dnsadditionalclasstext                      = -1;
+static int      hf_pie_interface_masters_dnsadditionalttl                            = -1;
+static int      hf_pie_interface_masters_dnsadditionalrdlength                       = -1;
+static int      hf_pie_interface_masters_dnsadditionalrdata                          = -1;
 
 static int      hf_string_len_short = -1;
 static int      hf_string_len_long  = -1;
@@ -4372,7 +4507,8 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
                          ixia_pie_seen = FALSE,
                          netscaler_pie_seen = FALSE,
                          barracuda_pie_seen = FALSE,
-                         gigamon_pie_seen = FALSE;
+                         gigamon_pie_seen = FALSE,
+                         interface_masters_pie_seen = FALSE;
 
 
     guint8       ip_protocol = 0;
@@ -4504,6 +4640,13 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
                     proto_item *pie_gigamon_ti = proto_tree_add_item(pdutree, hf_pie_gigamon, tvb, 0, 0, ENC_NA);
                     proto_item_set_hidden(pie_gigamon_ti);
                     gigamon_pie_seen = TRUE;
+                }
+                break;
+            case VENDOR_INTERFACE_MASTERS:
+                if (!interface_masters_pie_seen) {
+                    proto_item *pie_interface_masters_ti = proto_tree_add_item(pdutree, hf_pie_interface_masters, tvb, 0, 0, ENC_NA);
+                    proto_item_set_hidden(pie_interface_masters_ti);
+                    interface_masters_pie_seen = TRUE;
                 }
                 break;
 
@@ -10291,6 +10434,324 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
             /* END Gigamon */
 
+	    /* START Interface Masters */
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 100):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslservernameindication,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 101):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslserverversion,
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 102):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslserverversiontext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 103):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslservercipher,
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 104):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslserverciphertext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 105):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslconnectionencriptiontype,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 106):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslservercompressionmethod,
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 107):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslserversessionid,
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 108):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificateissuer,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 109):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificateissuername,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 110):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatesubject,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 111):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatesubjectname,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 112):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatevalidnotbefore,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 113):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatevalidnotafter,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 114):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificateserialnumber,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 115):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatesignaturealgorithm,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 116):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatesignaturealgorithmtext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 117):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatesubjectpublickeysize,
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 118):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatesubjectpublicalgorithm,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 119):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatesubjectpublicalgorithmtext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 120):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatesubjectalgorithmtext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 121):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_sslcertificatesubjectalternativename,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 200):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsidentifier,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 201):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsopcode,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 202):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponsecode,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 203):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsqueryname,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 204):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponsename,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 205):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponsettl,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 206):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponseipv4addr,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 207):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponseipv4addrtext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 208):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponseipv6addr,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 209):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponseipv6addrtext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 210):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsbits,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 211):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsqdcount,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 212):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsancount,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 213):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsnscount,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 214):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsarcount,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 215):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsquerytype,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 216):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsquerytypetext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 217):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsqueryclass,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 218):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsqueryclasstext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 219):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsreponsetype,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 220):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponsetypetext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 221):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponseclass,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 222):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponseclasstext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 223):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponserdlength,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 224):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsresponserdata,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 225):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsauthorityname,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 226):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsauthoritytype,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 227):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsauthoritytypetext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 228):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsauthorityclass,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 229):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsauthorityclasstext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 230):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsauthorityttl,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 231):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsauthorityrdlength,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 232):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsauthorityrdata,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 233):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsadditionalname,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 234):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsadditionaltype,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 235):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsadditionaltypetext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 236):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsadditionalclass,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 237):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsadditionalclasstext,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 238):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsadditionalttl,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 239):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsadditionalrdlength,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+        case ((VENDOR_INTERFACE_MASTERS << 16) | 240):
+            ti = proto_tree_add_item(pdutree, hf_pie_interface_masters_dnsadditionalrdata,
+                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            break;
+
+	    /* END Interface Masters */
+
         default:  /* Unknown Field ID */
             if ((hdrinfo_p->vspec == 9) || (pen == REVPEN)) {
                 ti = proto_tree_add_bytes_format_value(pdutree, hf_cflow_unknown_field_type,
@@ -10383,6 +10844,7 @@ static const int *v10_template_type_hf_list[TF_NUM_EXT] = {
     &hf_cflow_template_netscaler_field_type,
     &hf_cflow_template_barracuda_field_type,
     &hf_cflow_template_gigamon_field_type,
+    &hf_cflow_template_interface_masters_field_type,
     NULL};
 
 static value_string_ext *v9_template_type_vse_list[TF_NUM] = {
@@ -10397,6 +10859,7 @@ static value_string_ext *v10_template_type_vse_list[TF_NUM_EXT] = {
     &v10_template_types_netscaler_ext,
     &v10_template_types_barracuda_ext,
     &v10_template_types_gigamon_ext,
+    &v10_template_types_interface_masters_ext,
     NULL};
 
 static int
@@ -13463,6 +13926,11 @@ proto_register_netflow(void)
         {&hf_cflow_template_gigamon_field_type,
          {"Type", "cflow.template_gigamon_field_type",
           FT_UINT16, BASE_DEC|BASE_EXT_STRING, &v10_template_types_gigamon_ext, 0x7FFF,
+          "Template field type", HFILL}
+        },
+        {&hf_cflow_template_interface_masters_field_type,
+         {"Type", "cflow.template_interface_masters_field_type",
+          FT_UINT16, BASE_DEC|BASE_EXT_STRING, &v10_template_types_interface_masters_ext, 0x7FFF,
           "Template field type", HFILL}
         },
         {&hf_cflow_template_ipfix_field_type_enterprise,
@@ -17282,6 +17750,390 @@ proto_register_netflow(void)
         /* gigamon, 26866 / 231 */
         {&hf_pie_gigamon_dnsadditionalrdata,
          {"DnsAdditionalRdata", "cflow.pie.gigamon.dnsadditionalrdata",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters root (a hidden item to allow filtering) */
+        {&hf_pie_interface_masters,
+         {"InterfaceMasters", "cflow.pie.interfacemasters",
+          FT_NONE, BASE_NONE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 100 */
+        {&hf_pie_interface_masters_sslservernameindication,
+         {"SslServerNameIndication", "cflow.pie.interfacemasters.sslservernameindication",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 101 */
+        {&hf_pie_interface_masters_sslserverversion,
+         {"SslServerVersion", "cflow.pie.interfacemasters.sslserverversion",
+          FT_STRING, STR_UNICODE, NULL, 0X0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 102 */
+        {&hf_pie_interface_masters_sslserverversiontext,
+         {"SslServerVersionText", "cflow.pie.interfacemasters.sslserverversiontext",
+          FT_STRING, STR_UNICODE, NULL, 0X0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 103 */
+        {&hf_pie_interface_masters_sslservercipher,
+         {"SslServerCipher", "cflow.pie.interfacemasters.sslservercipher",
+          FT_STRING, STR_UNICODE, NULL, 0X0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 104 */
+        {&hf_pie_interface_masters_sslserverciphertext,
+         {"SslServerCipherText", "cflow.pie.interfacemasters.sslserverciphertext",
+          FT_STRING, STR_UNICODE, NULL, 0X0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 105 */
+        {&hf_pie_interface_masters_sslconnectionencriptiontype,
+         {"SslConnectionEncriptionType", "cflow.pie.interfacemasters.sslconnectionencriptiontype",
+          FT_STRING, STR_UNICODE, NULL, 0X0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 106 */
+        {&hf_pie_interface_masters_sslservercompressionmethod,
+         {"SslServerCompressionMethod", "cflow.pie.interfacemasters.sslservercompressionmethod",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 107 */
+        {&hf_pie_interface_masters_sslserversessionid,
+         {"SslServerSessionId", "cflow.pie.interfacemasters.sslserversessionid",
+          FT_STRING, STR_UNICODE, NULL, 0X0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 108 */
+        {&hf_pie_interface_masters_sslcertificateissuer,
+         {"SslCertificateIssuerName", "cflow.pie.interfacemasters.sslcertificateissuer",
+          FT_STRING, STR_UNICODE, NULL, 0X0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 109 */
+        {&hf_pie_interface_masters_sslcertificateissuername,
+         {"SslCertificateIssuerName", "cflow.pie.interfacemasters.sslcertificateissuername",
+          FT_STRING, STR_UNICODE, NULL, 0X0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 110 */
+        {&hf_pie_interface_masters_sslcertificatesubject,
+         {"SslCertificateSubject", "cflow.pie.interfacemasters.sslcertificatesubject",
+          FT_STRING, STR_UNICODE, NULL, 0X0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 111 */
+        {&hf_pie_interface_masters_sslcertificatesubjectname,
+         {"SslCertificateSubjectName", "cflow.pie.interfacemasters.sslcertificatesubjectname",
+          FT_STRING, STR_UNICODE, NULL, 0X0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 112 */
+        {&hf_pie_interface_masters_sslcertificatevalidnotbefore,
+         {"SslCertificateValidNotBefore", "cflow.pie.interfacemasters.sslcertificatevalidnotbefore",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 113 */
+        {&hf_pie_interface_masters_sslcertificatevalidnotafter,
+         {"SslCertificateValidNotAfter", "cflow.pie.interfacemasters.sslcertificatevalidnotafter",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 114 */
+        {&hf_pie_interface_masters_sslcertificateserialnumber,
+         {"SslCertificateSerialNumber", "cflow.pie.interfacemasters.sslcertificateserialnumber",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 115 */
+        {&hf_pie_interface_masters_sslcertificatesignaturealgorithm,
+         {"SslCertificateSignatureAlgorithm", "cflow.pie.interfacemasters.sslcertificatesignaturealgorithm",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 116 */
+        {&hf_pie_interface_masters_sslcertificatesignaturealgorithmtext,
+         {"SslCertificateSignatureAlgorithmText", "cflow.pie.interfacemasters.sslcertificatesignaturealgorithmtext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 117 */
+        {&hf_pie_interface_masters_sslcertificatesubjectpublickeysize,
+         {"SslCertificateSubjectPublicKeySize", "cflow.pie.interfacemasters.sslcertificatesubjectpublickeysize",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 118 */
+        {&hf_pie_interface_masters_sslcertificatesubjectpublicalgorithm,
+         {"SslCertificateSubjectPublicAlgorithm", "cflow.pie.interfacemasters.sslcertificatesubjectpublicalgorithm",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 119 */
+        {&hf_pie_interface_masters_sslcertificatesubjectpublicalgorithmtext,
+         {"SslCertificateSubjectPublicAlgorithmText", "cflow.pie.interfacemasters.sslcertificatesubjectpublicalgorithmtext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 120 */
+        {&hf_pie_interface_masters_sslcertificatesubjectalgorithmtext,
+         {"SslCertificateSubjectAlgorithmText", "cflow.pie.interfacemasters.sslcertificatesubjectalgorithmtext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 121 */
+        {&hf_pie_interface_masters_sslcertificatesubjectalternativename,
+         {"SslCertificateSubjectAlternativeName", "cflow.pie.interfacemasters.sslcertificatesubjectalternativename",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 200 */
+        {&hf_pie_interface_masters_dnsidentifier,
+         {"DnsIdentifier", "cflow.pie.interfacemasters.dnsidentifier",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 201 */
+        {&hf_pie_interface_masters_dnsopcode,
+         {"DnsOpCode", "cflow.pie.interfacemasters.dnsopcode",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 202 */
+        {&hf_pie_interface_masters_dnsresponsecode,
+         {"DnsResponseCode", "cflow.pie.interfacemasters.dnsresponsecode",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 203 */
+        {&hf_pie_interface_masters_dnsqueryname,
+         {"DnsQueryName", "cflow.pie.interfacemasters.dnsqueryname",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 204 */
+        {&hf_pie_interface_masters_dnsresponsename,
+         {"DnsResponseName", "cflow.pie.interfacemasters.dnsresponsename",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 205 */
+        {&hf_pie_interface_masters_dnsresponsettl,
+         {"DnsResponseTTL", "cflow.pie.interfacemasters.dnsresponsettl",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 206 */
+        {&hf_pie_interface_masters_dnsresponseipv4addr,
+         {"DnsResponseIPv4Addr", "cflow.pie.interfacemasters.dnsresponseipv4addr",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 207 */
+        {&hf_pie_interface_masters_dnsresponseipv4addrtext,
+         {"DnsResponseIPv4AddrText", "cflow.pie.interfacemasters.dnsresponseipv4addrtext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 208 */
+        {&hf_pie_interface_masters_dnsresponseipv6addr,
+         {"DnsResponseIPv6Addr", "cflow.pie.interfacemasters.dnsresponseipv6addr",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 209 */
+        {&hf_pie_interface_masters_dnsresponseipv6addrtext,
+         {"DnsResponseIPv6AddrText", "cflow.pie.interfacemasters.dnsresponseipv6addrtext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 210 */
+        {&hf_pie_interface_masters_dnsbits,
+         {"DnsBits", "cflow.pie.interfacemasters.dnsbits",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 211 */
+        {&hf_pie_interface_masters_dnsqdcount,
+         {"DnsQDCount", "cflow.pie.interfacemasters.dnsqdcount",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 212 */
+        {&hf_pie_interface_masters_dnsancount,
+         {"DnsANCount", "cflow.pie.interfacemasters.dnsancount",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 213 */
+        {&hf_pie_interface_masters_dnsnscount,
+         {"DnsNSCount", "cflow.pie.interfacemasters.dnsnscount",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 214 */
+        {&hf_pie_interface_masters_dnsarcount,
+         {"DnsARCount", "cflow.pie.interfacemasters.dnsarcount",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 215 */
+        {&hf_pie_interface_masters_dnsquerytype,
+         {"DnsQueryType", "cflow.pie.interfacemasters.dnsquerytype",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 216 */
+        {&hf_pie_interface_masters_dnsquerytypetext,
+         {"DnsQueryTypeText", "cflow.pie.interfacemasters.dnsquerytypetext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 217 */
+        {&hf_pie_interface_masters_dnsqueryclass,
+         {"DnsQueryClass", "cflow.pie.interfacemasters.dnsqueryclass",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 218 */
+        {&hf_pie_interface_masters_dnsqueryclasstext,
+         {"DnsQueryClassText", "cflow.pie.interfacemasters.dnsqueryclasstext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 219 */
+        {&hf_pie_interface_masters_dnsreponsetype,
+         {"DnsReponseType", "cflow.pie.interfacemasters.dnsreponsetype",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 220 */
+        {&hf_pie_interface_masters_dnsresponsetypetext,
+         {"DnsResponseTypeText", "cflow.pie.interfacemasters.dnsresponsetypetext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 221 */
+        {&hf_pie_interface_masters_dnsresponseclass,
+         {"DnsResponseClass", "cflow.pie.interfacemasters.dnsresponseclass",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 222 */
+        {&hf_pie_interface_masters_dnsresponseclasstext,
+         {"DnsResponseClassText", "cflow.pie.interfacemasters.dnsresponseclasstext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 223 */
+        {&hf_pie_interface_masters_dnsresponserdlength,
+         {"DnsResponseRDLength", "cflow.pie.interfacemasters.dnsresponserdlength",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 224 */
+        {&hf_pie_interface_masters_dnsresponserdata,
+         {"DnsResponseRData", "cflow.pie.interfacemasters.dnsresponserdata",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 225 */
+        {&hf_pie_interface_masters_dnsauthorityname,
+         {"DnsAuthorityName", "cflow.pie.interfacemasters.dnsauthorityname",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 226 */
+        {&hf_pie_interface_masters_dnsauthoritytype,
+         {"DnsAuthorityType", "cflow.pie.interfacemasters.dnsauthoritytype",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 227 */
+        {&hf_pie_interface_masters_dnsauthoritytypetext,
+         {"DnsAuthorityTypeText", "cflow.pie.interfacemasters.dnsauthoritytypetext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 228 */
+        {&hf_pie_interface_masters_dnsauthorityclass,
+         {"DnsAuthorityClass", "cflow.pie.interfacemasters.dnsauthorityclass",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 229 */
+        {&hf_pie_interface_masters_dnsauthorityclasstext,
+         {"DnsAuthorityClassText", "cflow.pie.interfacemasters.dnsauthorityclasstext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 230 */
+        {&hf_pie_interface_masters_dnsauthorityttl,
+         {"DnsAuthorityTTL", "cflow.pie.interfacemasters.dnsauthorityttl",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 231 */
+        {&hf_pie_interface_masters_dnsauthorityrdlength,
+         {"DnsAuthorityRDLength", "cflow.pie.interfacemasters.dnsauthorityrdlength",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 232 */
+        {&hf_pie_interface_masters_dnsauthorityrdata,
+         {"DnsAuthorityRData", "cflow.pie.interfacemasters.dnsauthorityrdata",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 233 */
+        {&hf_pie_interface_masters_dnsadditionalname,
+         {"DnsAdditionalName", "cflow.pie.interfacemasters.dnsadditionalname",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 234 */
+        {&hf_pie_interface_masters_dnsadditionaltype,
+         {"DnsAdditionalType", "cflow.pie.interfacemasters.dnsadditionaltype",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 235 */
+        {&hf_pie_interface_masters_dnsadditionaltypetext,
+         {"DnsAdditionalTypeText", "cflow.pie.interfacemasters.dnsadditionaltypetext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 236 */
+        {&hf_pie_interface_masters_dnsadditionalclass,
+         {"DnsAdditionalClass", "cflow.pie.interfacemasters.dnsadditionalclass",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 237 */
+        {&hf_pie_interface_masters_dnsadditionalclasstext,
+         {"DnsAdditionalClassText", "cflow.pie.interfacemasters.dnsadditionalclasstext",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 238 */
+        {&hf_pie_interface_masters_dnsadditionalttl,
+         {"DnsAdditionalTTL", "cflow.pie.interfacemasters.dnsadditionalttl",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 239 */
+        {&hf_pie_interface_masters_dnsadditionalrdlength,
+         {"DnsAdditionalRDLength", "cflow.pie.interfacemasters.dnsadditionalrdlength",
+          FT_STRING, STR_UNICODE, NULL, 0x0,
+          NULL, HFILL}
+        },
+        /* Interface Masters, 30324 / 240 */
+        {&hf_pie_interface_masters_dnsadditionalrdata,
+         {"DnsAdditionalRData", "cflow.pie.interfacemasters.dnsadditionalrdata",
           FT_STRING, STR_UNICODE, NULL, 0x0,
           NULL, HFILL}
         },
