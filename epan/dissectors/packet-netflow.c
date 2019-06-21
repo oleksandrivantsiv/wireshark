@@ -17768,7 +17768,7 @@ proto_register_netflow(void)
         /* Interface Masters, 30324 / 101 */
         {&hf_pie_interface_masters_sslserverversion,
          {"SslServerVersion", "cflow.pie.interfacemasters.sslserverversion",
-          FT_STRING, STR_UNICODE, NULL, 0X0,
+          FT_UINT16, BASE_HEX, NULL, 0X0,
           NULL, HFILL}
         },
         /* Interface Masters, 30324 / 102 */
@@ -17780,7 +17780,7 @@ proto_register_netflow(void)
         /* Interface Masters, 30324 / 103 */
         {&hf_pie_interface_masters_sslservercipher,
          {"SslServerCipher", "cflow.pie.interfacemasters.sslservercipher",
-          FT_STRING, STR_UNICODE, NULL, 0X0,
+          FT_UINT16, BASE_HEX, NULL, 0X0,
           NULL, HFILL}
         },
         /* Interface Masters, 30324 / 104 */
@@ -17804,12 +17804,12 @@ proto_register_netflow(void)
         /* Interface Masters, 30324 / 107 */
         {&hf_pie_interface_masters_sslserversessionid,
          {"SslServerSessionId", "cflow.pie.interfacemasters.sslserversessionid",
-          FT_STRING, STR_UNICODE, NULL, 0X0,
+          FT_BYTES, BASE_NONE, NULL, 0X0,
           NULL, HFILL}
         },
         /* Interface Masters, 30324 / 108 */
         {&hf_pie_interface_masters_sslcertificateissuer,
-         {"SslCertificateIssuerName", "cflow.pie.interfacemasters.sslcertificateissuer",
+         {"SslCertificateIssuer", "cflow.pie.interfacemasters.sslcertificateissuer",
           FT_STRING, STR_UNICODE, NULL, 0X0,
           NULL, HFILL}
         },
@@ -17864,7 +17864,7 @@ proto_register_netflow(void)
         /* Interface Masters, 30324 / 117 */
         {&hf_pie_interface_masters_sslcertificatesubjectpublickeysize,
          {"SslCertificateSubjectPublicKeySize", "cflow.pie.interfacemasters.sslcertificatesubjectpublickeysize",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Interface Masters, 30324 / 118 */
