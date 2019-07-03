@@ -3536,6 +3536,8 @@ pen_to_type_hf_list(guint32 pen) {
         return TF_BARRACUDA;
     case VENDOR_GIGAMON:
         return TF_GIGAMON;
+    case VENDOR_NIAGARA_NETWORKS:
+        return TF_NIAGARA_NETWORKS;
     default:
         return TF_NO_VENDOR_INFO;
     }
@@ -10434,7 +10436,7 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
             /* END Gigamon */
 
-        /* START Niagara Networks */
+            /* START Niagara Networks */
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 100):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_sslservernameindication,
                                      tvb, offset, length, ENC_UTF_8|ENC_NA);
@@ -10750,7 +10752,7 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
                                      tvb, offset, length, ENC_UTF_8|ENC_NA);
             break;
 
-	    /* END Niagara Networks */
+            /* END Niagara Networks */
 
         default:  /* Unknown Field ID */
             if ((hdrinfo_p->vspec == 9) || (pen == REVPEN)) {
