@@ -78,11 +78,11 @@
 #define VENDOR_T_SYSTEMS_NOVA       16787
 #define VENDOR_CHINATELECOM_GUANZHOU 20942
 #define VENDOR_GIGAMON              26866
-#define VENDOR_INTERFACE_MASTERS    30324
 #define VENDOR_CACE                 32622
 /* Greater than 32,767 need to be tagged unsigned. */
 #define VENDOR_NTOP                 35632u
 #define VENDOR_ERICSSON_CANADA_INC  46098u
+#define VENDOR_NIAGARA_NETWORKS     47729u
 #define VENDOR_CISCO_WIFI           4232704
 
 #endif /* __SMINMPEC_H__ */
