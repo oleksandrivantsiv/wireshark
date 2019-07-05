@@ -115,13 +115,6 @@ import tempfile
 
 class wireshark_gen_C:
 
-
-    #
-    # Turn DEBUG stuff on/off
-    #
-
-    DEBUG = 0
-
     #
     # Some string constants for our templates
     #
@@ -147,7 +140,10 @@ class wireshark_gen_C:
     # Constructor
     #
 
-    def __init__(self, st, protocol_name, dissector_name ,description):
+    def __init__(self, st, protocol_name, dissector_name ,description, debug=False, aggressive=False):
+        self.DEBUG = debug
+        self.AGGRESSIVE = aggressive
+
         self.st = output.Stream(tempfile.TemporaryFile(),4) # for first pass only
 
         self.st_save = st               # where 2nd pass should go
@@ -313,7 +309,7 @@ class wireshark_gen_C:
                 #self.get_CDR_alias(rt, rt.name() )
                 if (rt.unalias().kind() == idltype.tk_sequence):
                     self.st.out(self.template_hf, name=sname + "_return_loop")
-                    if (self.isSeqNativeType(rt.unalias().seqType())):
+                    if (self.isSeqNativeType(rt.unalias().seqType())) or self.AGGRESSIVE:
                         self.st.out(self.template_hf, name=sname + "_return")
                 elif ((rt.unalias().kind() != idltype.tk_struct) and \
                       (rt.unalias().kind() != idltype.tk_objref) and \
@@ -329,7 +325,7 @@ class wireshark_gen_C:
         for p in op.parameters():
             if (p.paramType().unalias().kind() == idltype.tk_sequence):
                 self.st.out(self.template_hf, name=sname + "_" + p.identifier() + "_loop")
-                if (self.isSeqNativeType(p.paramType().unalias().seqType())):
+                if (self.isSeqNativeType(p.paramType().unalias().seqType())) or self.AGGRESSIVE:
                     self.st.out(self.template_hf, name=sname + "_" + p.identifier())
             elif ((p.paramType().unalias().kind() != idltype.tk_any) and \
                   (p.paramType().unalias().kind() != idltype.tk_struct) and \
@@ -355,8 +351,12 @@ class wireshark_gen_C:
             sname = self.namespace(decl, "_")
 
             self.st.out(self.template_hf, name="get" + "_" + sname + "_" + decl.identifier())
+            if self.AGGRESSIVE:
+                self.st.out(self.template_hf, name="get" + "_" + sname + "_" + decl.identifier()+"_loop")
             if not at.readonly():
                 self.st.out(self.template_hf, name="set" + "_" + sname + "_" + decl.identifier())
+                if self.AGGRESSIVE:
+                    self.st.out(self.template_hf, name="set" + "_" + sname + "_" + decl.identifier()+"_loop")
 
     #
     # genStDeclares()
@@ -378,7 +378,7 @@ class wireshark_gen_C:
                 for decl in m.declarators():
                     if (m.memberType().unalias().kind() == idltype.tk_sequence):
                         self.st.out(self.template_hf, name=sname + "_" + decl.identifier() + "_loop")
-                        if (self.isSeqNativeType(m.memberType().unalias().seqType())):
+                        if (self.isSeqNativeType(m.memberType().unalias().seqType())) or self.AGGRESSIVE:
                             self.st.out(self.template_hf, name=sname + "_" + decl.identifier())
                     else:
                         if (m.memberType().unalias().kind() == idltype.tk_wchar):
@@ -1517,7 +1517,8 @@ class wireshark_gen_C:
                 print "XXX get_CDR_alias_hf, type = " ,type , " pn = " , pn
                 print "XXX get_CDR_alias_hf, type.decl() = " ,type.decl()
 
-            self.getCDR_hf(type, desc, filter, decl.identifier() )
+            #self.getCDR_hf(type.unalias(), desc, filter, decl.identifier() )
+            self.getCDR_hf(type.unalias(), desc, filter, pn )
 
 
     #
@@ -1545,6 +1546,8 @@ class wireshark_gen_C:
                             un_need_item = 1
                     else:
                         un_need_item = 1
+        if self.AGGRESSIVE:
+            un_need_item = 1
 
         sname = self.namespace(un, "_")
         self.curr_sname = sname         # update current opnode/exnode/stnode/unnode scoped name
@@ -1719,7 +1722,7 @@ class wireshark_gen_C:
 
         else:                           # a simple typdef
 
-            self.getCDR(type, pn )
+            self.getCDR(type.unalias(), pn )
 
 
 
@@ -2988,27 +2991,27 @@ decode_@sname@_at(tvbuff_t *tvb _U_, packet_info *pinfo _U_, proto_tree *tree _U
     #
 
     template_union_code_save_discriminant_enum = """\
-disc_s_@discname@ = (gint32) u_octet4;     /* save Enum Value  discriminant and cast to gint32 */
+disc_s_@discname@ = (gint32) get_CDR_ulong(tvb,offset,stream_is_big_endian, boundary);     /* save Enum Value  discriminant and cast to gint32 */
 """
     template_union_code_save_discriminant_long = """\
-disc_s_@discname@ = (gint32) s_octet4;     /* save gint32 discriminant and cast to gint32 */
+disc_s_@discname@ = (gint32) get_CDR_long(tvb,offset,stream_is_big_endian, boundary);     /* save gint32 discriminant and cast to gint32 */
 """
 
     template_union_code_save_discriminant_ulong = """\
-disc_s_@discname@ = (gint32) u_octet4;     /* save guint32 discriminant and cast to gint32 */
+disc_s_@discname@ = (gint32) get_CDR_ulong(tvb,offset,stream_is_big_endian, boundary);     /* save guint32 discriminant and cast to gint32 */
 """
     template_union_code_save_discriminant_short = """\
-disc_s_@discname@ = (gint32) s_octet2;     /* save gint16 discriminant and cast to gint32 */
+disc_s_@discname@ = (gint32) get_CDR_short(tvb,offset,stream_is_big_endian, boundary);     /* save gint16 discriminant and cast to gint32 */
 """
 
     template_union_code_save_discriminant_ushort = """\
-disc_s_@discname@ = (gint32) u_octet2;     /* save guint16 discriminant and cast to gint32 */
+disc_s_@discname@ = (gint32) get_CDR_ushort(tvb,offset,stream_is_big_endian, boundary);     /* save guint16 discriminant and cast to gint32 */
 """
     template_union_code_save_discriminant_char = """\
-disc_s_@discname@ = (gint32) u_octet1;     /* save guint1 discriminant and cast to gint32 */
+disc_s_@discname@ = (gint32) get_CDR_char(tvb,offset,stream_is_big_endian, boundary);     /* save guint1 discriminant and cast to gint32 */
 """
     template_union_code_save_discriminant_boolean = """\
-disc_s_@discname@ = (gint32) u_octet1;     /* save guint1 discriminant and cast to gint32 */
+disc_s_@discname@ = (gint32) get_CDR_boolean(tvb,offset,stream_is_big_endian, boundary);     /* save guint1 discriminant and cast to gint32 */
 """
     template_comment_union_code_label_compare_start = """\
 if (disc_s_@discname@ == @labelval@) {

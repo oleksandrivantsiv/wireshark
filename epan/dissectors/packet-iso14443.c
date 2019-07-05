@@ -91,6 +91,7 @@ typedef struct _iso14443_transaction_t {
 typedef enum _iso14443_type_t {
     ISO14443_A,
     ISO14443_B,
+    ISO14443_UNKNOWN
 } iso14443_type_t;
 
 static const value_string iso14443_short_frame[] = {
@@ -1071,9 +1072,6 @@ dissect_iso14443_cmd_type_block(tvbuff_t *tvb, packet_info *pinfo,
     }
 
     if (inf_len > 0) {
-        fragment_head *frag_msg;
-        tvbuff_t *payload_tvb;
-
         inf_ti = proto_tree_add_item(tree, hf_iso14443_inf,
                 tvb, offset, inf_len, ENC_NA);
         if (block_type == S_BLOCK_TYPE) {
@@ -1089,10 +1087,16 @@ dissect_iso14443_cmd_type_block(tvbuff_t *tvb, packet_info *pinfo,
         }
 
         if (block_type == I_BLOCK_TYPE) {
-            frag_msg = fragment_add_seq_next(&i_block_reassembly_table,
-                    tvb, offset, pinfo, 0, NULL, inf_len, (pcb & 0x10) ? 1 : 0);
+            fragment_head *frag_msg;
+            tvbuff_t *inf_tvb, *payload_tvb;
 
-            payload_tvb = process_reassembled_data(tvb, offset, pinfo,
+            /* see the comment in dissect_dvbci_tpdu (packet-dvbci.c) */
+            inf_tvb = tvb_new_subset_length(tvb, offset, inf_len);
+            frag_msg = fragment_add_seq_next(&i_block_reassembly_table,
+                    inf_tvb, 0, pinfo, 0, NULL, inf_len,
+                    (pcb & 0x10) ? 1 : 0);
+
+            payload_tvb = process_reassembled_data(inf_tvb, 0, pinfo,
                     "Reassembled APDU", frag_msg,
                     &i_block_frag_items, NULL, tree);
 
@@ -1108,21 +1112,29 @@ dissect_iso14443_cmd_type_block(tvbuff_t *tvb, packet_info *pinfo,
     }
 
     if (!crc_dropped) {
-        iso14443_type_t t;
+        iso14443_type_t t = ISO14443_UNKNOWN;
         conversation_t *conv;
+        guint32 computed_checksum = 0;
+        guint flags = PROTO_CHECKSUM_NO_FLAGS;
 
         conv = find_conversation_by_id(pinfo->num, ENDPOINT_ISO14443, ISO14443_CIRCUIT_ID, 0);
-        if (conv) {
+        if (conv)
             t = (iso14443_type_t)GPOINTER_TO_UINT(conversation_get_proto_data(conv, proto_iso14443));
 
-            proto_tree_add_checksum(tree, tvb, offset,
-                    hf_iso14443_crc, hf_iso14443_crc_status, &ei_iso14443_wrong_crc, pinfo,
-                    (t == ISO14443_A) ?
-                    crc16_iso14443a_tvb_offset(tvb, 0, offset) :
-                    crc16_ccitt_tvb_offset(tvb, 0, offset),
-                    ENC_LITTLE_ENDIAN, PROTO_CHECKSUM_VERIFY);
-            offset += CRC_LEN;
+        if (t == ISO14443_A) {
+            computed_checksum = crc16_iso14443a_tvb_offset(tvb, 0, offset);
+            flags |= PROTO_CHECKSUM_VERIFY;
         }
+        else if (t == ISO14443_B) {
+            computed_checksum = crc16_ccitt_tvb_offset(tvb, 0, offset);
+            flags |= PROTO_CHECKSUM_VERIFY;
+        }
+
+        proto_tree_add_checksum(tree, tvb, offset,
+                    hf_iso14443_crc, hf_iso14443_crc_status,
+                    &ei_iso14443_wrong_crc, pinfo, computed_checksum,
+                    ENC_LITTLE_ENDIAN, flags);
+        offset += CRC_LEN;
     }
 
     return offset;
@@ -1899,8 +1911,7 @@ proto_register_iso14443(void)
 
     iso14443_subdissector_table =
         register_decode_as_next_proto(proto_iso14443,
-                "Payload", "iso14443.subdissector",
-                "ISO14443 payload subdissector", NULL);
+                "iso14443.subdissector", "ISO14443 payload subdissector", NULL);
 }
 
 

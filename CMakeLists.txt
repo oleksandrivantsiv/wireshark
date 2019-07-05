@@ -41,6 +41,11 @@ set(PROJECT_VERSION "${PROJECT_MAJOR_VERSION}.${PROJECT_MINOR_VERSION}.${PROJECT
 
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 
+# We require minimum C++11
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 message(STATUS "Generating build using CMake ${CMAKE_VERSION}")
 
 #Where to find local cmake scripts
@@ -1364,7 +1369,6 @@ set(PLUGIN_VERSION_DIR "plugins/${PLUGIN_PATH_ID}")
 
 add_subdirectory( capchild )
 add_subdirectory( caputils )
-add_subdirectory( codecs )
 add_subdirectory( doc )
 add_subdirectory( docbook EXCLUDE_FROM_ALL )
 add_subdirectory( epan )
@@ -1433,9 +1437,26 @@ if(ENABLE_PLUGINS)
 		plugins/epan/wimaxasncp
 		plugins/epan/wimaxmacphy
 		plugins/wiretap/usbdump
+		plugins/codecs/G711
 		plugins/codecs/l16_mono
 		${CUSTOM_PLUGIN_SRC_DIR}
 	)
+	if(SPANDSP_FOUND)
+		list(APPEND PLUGIN_SRC_DIRS
+			plugins/codecs/G722
+			plugins/codecs/G726
+		)
+	endif()
+	if(BCG729_FOUND)
+		list(APPEND PLUGIN_SRC_DIRS
+			plugins/codecs/G729
+		)
+	endif()
+	if(SBC_FOUND)
+		list(APPEND PLUGIN_SRC_DIRS
+			plugins/codecs/sbc
+		)
+	endif()
 
 	# Build demo plugin, only if asked explicitly
 	if(ENABLE_PLUGIN_IFDEMO)
@@ -1506,7 +1527,6 @@ set(CFG_OUT_FILES
 	image/libwireshark.rc
 	image/wireshark.rc
 	image/dumpcap.rc
-	image/libwscodecs.rc
 	image/libwsutil.rc
 	image/wiretap.rc
 	image/wireshark.exe.manifest
@@ -1615,6 +1635,7 @@ elseif(APPLE)
 endif()
 
 set(TSHARK_TAP_SRC
+	${CMAKE_SOURCE_DIR}/ui/cli/tap-credentials.c
 	${CMAKE_SOURCE_DIR}/ui/cli/tap-camelsrt.c
 	${CMAKE_SOURCE_DIR}/ui/cli/tap-diameter-avp.c
 	${CMAKE_SOURCE_DIR}/ui/cli/tap-expert.c
@@ -1661,6 +1682,7 @@ set(INSTALL_FILES
 	cfilters
 	colorfilters
 	dfilters
+	dfilter_macros
 	enterprises.tsv
 	ipmap.html
 	manuf
@@ -2198,7 +2220,6 @@ if(BUILD_wireshark AND QT_FOUND)
 		capchild
 		caputils
 		wiretap
-		wscodecs
 		epan
 		${QT_LIBRARIES}
 		${VERSION_INFO_LIBS}
@@ -2398,7 +2419,6 @@ endif()
 if(BUILD_sharkd)
 	set(sharkd_LIBS
 		ui
-		wscodecs
 		wiretap
 		epan
 		${VERSION_INFO_LIBS}
@@ -2406,6 +2426,7 @@ if(BUILD_sharkd)
 		${APPLE_SYSTEM_CONFIGURATION_LIBRARY}
 		${WIN_WS2_32_LIBRARY}
 		${SPEEXDSP_LIBRARIES}
+		${M_LIBRARIES}
 	)
 	set(sharkd_FILES
 		#
@@ -2849,7 +2870,7 @@ if(DPKG_BUILDPACKAGE_EXECUTABLE)
 	)
 endif()
 
-if(LINUXDEPLOYQT_EXECUTABLE AND APPIMAGETOOL_EXECUTALBE)
+if(LINUXDEPLOYQT_EXECUTABLE AND APPIMAGETOOL_EXECUTABLE)
 	# The documentation at https://github.com/probonopd/linuxdeployqt
 	# says that you need to set CMAKE_BUILD_TYPE=Release and
 	# CMAKE_INSTALL_PREFIX=/usr. I (gcc) also had to set

@@ -154,7 +154,7 @@ prefs_store_ext_multiple(const char * module, GHashTable * pref_values)
 }
 
 gint
-column_prefs_add_custom(gint fmt, const gchar *title, const gchar *custom_fields, gint custom_occurrence)
+column_prefs_add_custom(gint fmt, const gchar *title, const gchar *custom_fields, gint position)
 {
     GList *clp;
     fmt_data *cfmt, *last_cfmt;
@@ -169,7 +169,7 @@ column_prefs_add_custom(gint fmt, const gchar *title, const gchar *custom_fields
     cfmt->title = g_strdup(title);
     cfmt->fmt = fmt;
     cfmt->custom_fields = g_strdup(custom_fields);
-    cfmt->custom_occurrence = custom_occurrence;
+    cfmt->custom_occurrence = 0;
     cfmt->resolved = TRUE;
 
     colnr = g_list_length(prefs.col_list);
@@ -178,7 +178,10 @@ column_prefs_add_custom(gint fmt, const gchar *title, const gchar *custom_fields
         cfmt->visible = TRUE;
         clp = g_list_last(prefs.col_list);
         last_cfmt = (fmt_data *) clp->data;
-        if (last_cfmt->fmt == COL_INFO) {
+        if (position > 0 && position <= colnr) {
+            /* Custom fields may be added at any position, depending on the given argument */
+            prefs.col_list = g_list_insert(prefs.col_list, cfmt, position);
+        } else if (last_cfmt->fmt == COL_INFO) {
             /* Last column is COL_INFO, add custom column before this */
             colnr -= 1;
             prefs.col_list = g_list_insert(prefs.col_list, cfmt, colnr);
