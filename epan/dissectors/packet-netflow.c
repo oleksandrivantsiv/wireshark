@@ -1853,7 +1853,7 @@ static const value_string v10_template_types_niagara_networks[] = {
     { 216, "DnsQueryTypeText" },
     { 217, "DnsQueryClass" },
     { 218, "DnsQueryClassText" },
-    { 219, "DnsReponseType" },
+    { 219, "DnsResponseType" },
     { 220, "DnsResponseTypeText" },
     { 221, "DnsResponseClass" },
     { 222, "DnsResponseClassText" },
@@ -3438,7 +3438,7 @@ static int      hf_pie_niagara_networks_dnsquerytype                            
 static int      hf_pie_niagara_networks_dnsquerytypetext                            = -1;
 static int      hf_pie_niagara_networks_dnsqueryclass                               = -1;
 static int      hf_pie_niagara_networks_dnsqueryclasstext                           = -1;
-static int      hf_pie_niagara_networks_dnsreponsetype                              = -1;
+static int      hf_pie_niagara_networks_dnsresponsetype                             = -1;
 static int      hf_pie_niagara_networks_dnsresponsetypetext                         = -1;
 static int      hf_pie_niagara_networks_dnsresponseclass                            = -1;
 static int      hf_pie_niagara_networks_dnsresponseclasstext                        = -1;
@@ -10778,12 +10778,12 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 106):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_sslservercompressionmethod,
-                                     tvb, offset, length, ENC_BIG_ENDIAN);
+                                     tvb, offset, length, ENC_ASCII|ENC_NA);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 107):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_sslserversessionid,
-                                     tvb, offset, length, ENC_BIG_ENDIAN);
+                                     tvb, offset, length, ENC_NA);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 108):
@@ -10858,17 +10858,17 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 200):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsidentifier,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 201):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsopcode,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 202):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsresponsecode,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 203):
@@ -10883,7 +10883,7 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 205):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsresponsettl,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 206):
@@ -10908,32 +10908,32 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 210):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsbits,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 211):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsqdcount,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 212):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsancount,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 213):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsnscount,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 214):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsarcount,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 215):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsquerytype,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 216):
@@ -10943,7 +10943,7 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 217):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsqueryclass,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 218):
@@ -10952,8 +10952,8 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 219):
-            ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsreponsetype,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+            ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsresponsetype,
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 220):
@@ -10963,7 +10963,7 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 221):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsresponseclass,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 222):
@@ -10973,12 +10973,12 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 223):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsresponserdlength,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 224):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsresponserdata,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 225):
@@ -10988,7 +10988,7 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 226):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsauthoritytype,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 227):
@@ -10998,7 +10998,7 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 228):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsauthorityclass,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 229):
@@ -11008,12 +11008,12 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 230):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsauthorityttl,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 231):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsauthorityrdlength,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 232):
@@ -11028,7 +11028,7 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 234):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsadditionaltype,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 235):
@@ -11038,7 +11038,7 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 236):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsadditionalclass,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 237):
@@ -11048,12 +11048,12 @@ dissect_v9_v10_pdu_data(tvbuff_t *tvb, packet_info *pinfo, proto_tree *pdutree, 
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 238):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsadditionalttl,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 239):
             ti = proto_tree_add_item(pdutree, hf_pie_niagara_networks_dnsadditionalrdlength,
-                                     tvb, offset, length, ENC_UTF_8|ENC_NA);
+                                     tvb, offset, length, ENC_BIG_ENDIAN);
             break;
 
         case ((VENDOR_NIAGARA_NETWORKS << 16) | 240):
@@ -18212,19 +18212,19 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 200 */
         {&hf_pie_niagara_networks_dnsidentifier,
          {"DnsIdentifier", "cflow.pie.niagaranetworks.dnsidentifier",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_HEX, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 201 */
         {&hf_pie_niagara_networks_dnsopcode,
          {"DnsOpCode", "cflow.pie.niagaranetworks.dnsopcode",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT8, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 202 */
         {&hf_pie_niagara_networks_dnsresponsecode,
          {"DnsResponseCode", "cflow.pie.niagaranetworks.dnsresponsecode",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT8, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 203 */
@@ -18242,7 +18242,7 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 205 */
         {&hf_pie_niagara_networks_dnsresponsettl,
          {"DnsResponseTTL", "cflow.pie.niagaranetworks.dnsresponsettl",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT32, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 206 */
@@ -18278,31 +18278,31 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 211 */
         {&hf_pie_niagara_networks_dnsqdcount,
          {"DnsQDCount", "cflow.pie.niagaranetworks.dnsqdcount",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 212 */
         {&hf_pie_niagara_networks_dnsancount,
          {"DnsANCount", "cflow.pie.niagaranetworks.dnsancount",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 213 */
         {&hf_pie_niagara_networks_dnsnscount,
          {"DnsNSCount", "cflow.pie.niagaranetworks.dnsnscount",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 214 */
         {&hf_pie_niagara_networks_dnsarcount,
          {"DnsARCount", "cflow.pie.niagaranetworks.dnsarcount",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 215 */
         {&hf_pie_niagara_networks_dnsquerytype,
          {"DnsQueryType", "cflow.pie.niagaranetworks.dnsquerytype",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 216 */
@@ -18314,7 +18314,7 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 217 */
         {&hf_pie_niagara_networks_dnsqueryclass,
          {"DnsQueryClass", "cflow.pie.niagaranetworks.dnsqueryclass",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 218 */
@@ -18324,9 +18324,9 @@ proto_register_netflow(void)
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 219 */
-        {&hf_pie_niagara_networks_dnsreponsetype,
-         {"DnsReponseType", "cflow.pie.niagaranetworks.dnsreponsetype",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+        {&hf_pie_niagara_networks_dnsresponsetype,
+         {"DnsResponseType", "cflow.pie.niagaranetworks.dnsresponsetype",
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 220 */
@@ -18338,7 +18338,7 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 221 */
         {&hf_pie_niagara_networks_dnsresponseclass,
          {"DnsResponseClass", "cflow.pie.niagaranetworks.dnsresponseclass",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 222 */
@@ -18350,7 +18350,7 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 223 */
         {&hf_pie_niagara_networks_dnsresponserdlength,
          {"DnsResponseRDLength", "cflow.pie.niagaranetworks.dnsresponserdlength",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 224 */
@@ -18368,7 +18368,7 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 226 */
         {&hf_pie_niagara_networks_dnsauthoritytype,
          {"DnsAuthorityType", "cflow.pie.niagaranetworks.dnsauthoritytype",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 227 */
@@ -18380,7 +18380,7 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 228 */
         {&hf_pie_niagara_networks_dnsauthorityclass,
          {"DnsAuthorityClass", "cflow.pie.niagaranetworks.dnsauthorityclass",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 229 */
@@ -18392,13 +18392,13 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 230 */
         {&hf_pie_niagara_networks_dnsauthorityttl,
          {"DnsAuthorityTTL", "cflow.pie.niagaranetworks.dnsauthorityttl",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT32, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 231 */
         {&hf_pie_niagara_networks_dnsauthorityrdlength,
          {"DnsAuthorityRDLength", "cflow.pie.niagaranetworks.dnsauthorityrdlength",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 232 */
@@ -18416,7 +18416,7 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 234 */
         {&hf_pie_niagara_networks_dnsadditionaltype,
          {"DnsAdditionalType", "cflow.pie.niagaranetworks.dnsadditionaltype",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 235 */
@@ -18428,7 +18428,7 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 236 */
         {&hf_pie_niagara_networks_dnsadditionalclass,
          {"DnsAdditionalClass", "cflow.pie.niagaranetworks.dnsadditionalclass",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 237 */
@@ -18440,13 +18440,13 @@ proto_register_netflow(void)
         /* Niagara Networks, 47729 / 238 */
         {&hf_pie_niagara_networks_dnsadditionalttl,
          {"DnsAdditionalTTL", "cflow.pie.niagaranetworks.dnsadditionalttl",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT32, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 239 */
         {&hf_pie_niagara_networks_dnsadditionalrdlength,
          {"DnsAdditionalRDLength", "cflow.pie.niagaranetworks.dnsadditionalrdlength",
-          FT_STRING, STR_UNICODE, NULL, 0x0,
+          FT_UINT16, BASE_DEC, NULL, 0x0,
           NULL, HFILL}
         },
         /* Niagara Networks, 47729 / 240 */
